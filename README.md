@@ -113,3 +113,54 @@ _Adjust username and password if your MySQL credentials are different._
 - Use ` mvn clean install ` after any backend code changes to refresh dependencies.
 
 - React frontend must be started from the ` frontend ` folder (` cd frontend && npm start `).
+
+# Swagger API Documentation
+
+The project includes a Swagger UI for testing and exploring the backend APIs.
+
+## Access Swagger UI
+
+Make sure your **backend is running** first:
+
+` mvn spring-boot:run `
+
+Then open:
+
+http://localhost:8080/swagger-ui/index.html#/
+
+## Authorization
+
+Some endpoints require authentication (Admin/Employee). To test these:
+
+**1. Login first:** Use the ` /api/auth/login ` endpoint.
+
+**2. Request Body Format:**
+
+` { `
+
+`    "email": "string", `
+
+`    "password": "string" `
+
+` } `
+
+**3.** Copy the tokey key from the response **(just the raw text, no quotes).**
+
+**4.** Click **Authorize** at the top right of Swagger UI and paste the token.
+
+Once authorized, you can test all endpoints accessible for your role (Admin or Employee).
+
+## Test an API
+
+**1.** Click on the API you want to test.
+
+**2.** Click **Try it out.**
+
+**3.** Provide the required request body (if applicable) or fill in the form fields.
+
+**4.** Click **Execute** and observe the response.
+
+### Note:
+
+Ensure the backend is running and the database is connected before testing endpoints.
+
