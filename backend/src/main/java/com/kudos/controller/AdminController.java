@@ -1,15 +1,16 @@
 package com.kudos.controller;
 
+import com.kudos.dto.EmployeeDTO;
 import com.kudos.model.Admin;
 import com.kudos.model.Employee;
-import com.kudos.repository.AdminRepository;
-import com.kudos.security.JwtUtil;
 import com.kudos.service.AdminService;
-import com.kudos.service.EmployeeService;
-import com.kudos.dto.EmployeeDTO;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.MediaType;
 
 @Tag(name = "Admin API", description = "Admin operations for kudos system")
 @RestController
@@ -36,7 +31,7 @@ public class AdminController {
 
     // ---------------- REGISTER ADMIN (One-time setup) ----------------
     @Operation(summary = "Register admin", description = "One-time setup for first admin", security = {})
-    @PostMapping("/register")
+    @PostMapping("/register") // Create account/user
     @PreAuthorize("permitAll()") // Public for first admin registration
     public ResponseEntity<?> register(@RequestBody Map<String, String> body) {
         String email = body.get("email");

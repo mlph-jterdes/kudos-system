@@ -66,7 +66,7 @@ const EmployeeDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   const handleMenuClick = (menu) => {

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class AdminInitializer implements CommandLineRunner {
 
     private final AdminRepository adminRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // Inject values from application.properties
     @Value("${admin.default.email}")
