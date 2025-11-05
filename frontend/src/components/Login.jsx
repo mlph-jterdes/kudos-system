@@ -108,6 +108,14 @@ const Login = () => {
         >
           View Public Leaderboard
         </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          href="/publicKudos"
+          sx={{ mt: 2 }}
+        >
+          View Public Kudos
+        </Button>
       </Box>
     </Container>
   );

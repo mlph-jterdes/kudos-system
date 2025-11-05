@@ -50,10 +50,12 @@ public class SecurityConfig {
                                                                 "/api/kudos/employee/{employeeId}/kudos-count",
                                                                 "/api/kudos/team/{teamId}/history",
                                                                 "/api/kudos/leaderboard/employees",
-                                                                "/api/kudos/leaderboard/teams", "/api/kudos/**",
-                                                                "/api/admin/login", "/api/employee/all",
-                                                                "/api/employee/teams", "/leaderboard",
-                                                                "/api/employee/me")
+                                                                "/api/kudos/leaderboard/teams", "/api/admin/login",
+                                                                "/api/employee/all", "/api/employee/teams",
+                                                                "/leaderboard", "/api/employee/me",
+                                                                "/api/kudos/public/history",
+                                                                "/api/kudos/employee/*/history",
+                                                                "/api/kudos/team/*/history")
                                                 .permitAll()
                                                 // Admin-only endpoints
                                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")

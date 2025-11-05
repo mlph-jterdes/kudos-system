@@ -4,6 +4,7 @@ import Login from './components/Login';
 import AdminPage from './pages/AdminDashboard';
 import EmployeePage from './pages/EmployeeDashboard';
 import PublicLeaderboard from "./pages/PublicLeaderboard";
+import PublicKudosSearch from "./pages/PublicKudosSearch";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/employee" element={<EmployeePage />} />
         <Route path="/leaderboard" element={<PublicLeaderboard />} />
+        <Route path="/publicKudos" element={<PublicKudosSearch />} />
       </Routes>
     </Router>
   );

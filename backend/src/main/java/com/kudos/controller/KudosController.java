@@ -2,6 +2,7 @@ package com.kudos.controller;
 
 import com.kudos.model.Employee;
 import com.kudos.model.Kudos;
+import com.kudos.model.Team;
 import com.kudos.service.KudosService;
 import com.kudos.service.EmployeeService;
 import com.kudos.dto.KudosDTO;
@@ -19,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 
@@ -34,6 +39,21 @@ public class KudosController {
     private final EmployeeRepository employeeRepository;
     private final TeamRepository teamRepository;
     private final KudosRepository kudosRepository;
+
+    // ---------------- PUBLIC SEARCH: HISTORY ----------------
+    @Operation(summary = "Public history - Kudos/comments for employee or team", description = "Lists kudos/comments received by a specific employee or team with optional period filtering and message limit.", tags = {
+            "Public Search" })
+    @GetMapping("/public/history")
+    public ResponseEntity<?> getPublicHistory(@RequestParam(required = false) Long employeeId,
+            @RequestParam(required = false) Long teamId, @RequestParam(defaultValue = "all") String period,
+            @RequestParam(defaultValue = "false") boolean showAllMessages) {
+
+        if (employeeId == null && teamId == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "employeeId or teamId is required"));
+        }
+
+        return ResponseEntity.ok(kudosService.getPublicHistory(employeeId, teamId, period, showAllMessages));
+    }
 
     // ---------------- GET TOTAL KUDOS COUNT ----------------
     @GetMapping("/employee/{employeeId}/kudos-count")

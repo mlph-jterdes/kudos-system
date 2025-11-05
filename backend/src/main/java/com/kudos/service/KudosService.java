@@ -22,6 +22,51 @@ public class KudosService {
     private final EmployeeRepository employeeRepository;
     private final TeamRepository teamRepository;
 
+    // ---------------- PUBLIC SEARCH: HISTORY ----------------
+    public Map<String, Object> getPublicHistory(Long employeeId, Long teamId, String period, boolean showAllMessages) {
+        Map<String, Object> result = new HashMap<>();
+        List<Kudos> kudosList;
+
+        LocalDateTime startDate;
+        switch (period.toLowerCase()) {
+        case "week" -> startDate = LocalDateTime.now().minusWeeks(1);
+        case "month" -> startDate = LocalDateTime.now().minusMonths(1);
+        default -> startDate = null;
+        }
+
+        if (employeeId != null) {
+            Employee employee = employeeRepository.findById(employeeId)
+                    .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+            kudosList = employee.getReceivedKudos().stream()
+                    .filter(k -> startDate == null || k.getCreatedAt().isAfter(startDate))
+                    .sorted(Comparator.comparing(Kudos::getCreatedAt).reversed()).collect(Collectors.toList());
+
+            result.put("type", "employee");
+            result.put("name", employee.getName());
+            result.put("kudosCount", employee.getKudosCount());
+            result.put("messages", showAllMessages ? kudosList.stream().map(this::toMessageDTO).toList()
+                    : kudosList.stream().limit(5).map(this::toMessageDTO).toList());
+
+        } else if (teamId != null) {
+            Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
+
+            kudosList = team.getMembers().stream().flatMap(emp -> emp.getReceivedKudos().stream())
+                    .filter(k -> startDate == null || k.getCreatedAt().isAfter(startDate))
+                    .sorted(Comparator.comparing(Kudos::getCreatedAt).reversed()).collect(Collectors.toList());
+
+            int totalKudos = team.getMembers().stream().mapToInt(Employee::getKudosCount).sum();
+
+            result.put("type", "team");
+            result.put("name", team.getName());
+            result.put("kudosCount", totalKudos);
+            result.put("messages", showAllMessages ? kudosList.stream().map(this::toMessageDTO).toList()
+                    : kudosList.stream().limit(5).map(this::toMessageDTO).toList());
+        }
+
+        return result;
+    }
+
     // ---------------- SEND KUDOS ----------------
     public Kudos sendKudos(String senderEmployeeId, String message, Long recipientEmployeeId, Long recipientTeamId,
             boolean anonymous) {
@@ -306,5 +351,11 @@ public class KudosService {
         default:
             throw new IllegalArgumentException("Invalid period. Use 'week', 'month', or 'all'.");
         }
+    }
+
+    // map Kudos entity to DTO for JSON
+    private Map<String, Object> toMessageDTO(Kudos k) {
+        return Map.of("id", k.getId(), "sender", k.getSenderName() != null ? k.getSenderName() : "System", "isComment",
+                k.isComment(), "message", k.getMessage(), "createdAt", k.getCreatedAt());
     }
 }
