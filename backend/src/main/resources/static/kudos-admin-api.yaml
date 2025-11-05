@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Kudos Admin API
+  description: Admin operations for Kudos system (login, register, employee management)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Admin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Employee:
+      type: object
+      properties:
+        employeeId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        department:
+          type: string
+        kudosCount:
+          type: integer
+          format: int32
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/admin/login:
+    post:
+      summary: Admin login
+      description: Login admin and return JWT token
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Invalid credentials
+
+  /api/admin/register:
+    post:
+      summary: Register first admin
+      description: One-time setup for first admin
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+      responses:
+        '200':
+          description: Admin registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+        '400':
+          description: Admin already exists
+
+  /api/admin/upload:
+    post:
+      summary: Upload employees via CSV
+      description: JWT required
+      tags:
+        - Admin
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Upload result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /api/admin/reset-kudos:
+    post:
+      summary: Reset kudos counts for all employees
+      description: JWT required
+      tags:
+        - Admin
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Kudos counts reset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/admin/employees:
+    get:
+      summary: Get all employees
+      description: JWT required
+      tags:
+        - Admin
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+
+    post:
+      summary: Create new employee
+      description: JWT required
+      tags:
+        - Admin
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '400':
+          description: Employee already exists
