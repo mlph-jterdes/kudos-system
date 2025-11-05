@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# Peer Recognition & Kudos System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack peer recognition system where employees can send and receive kudos, leave comments, and view leaderboards.
 
-## Available Scripts
+## Project Overview
+- This project allows employees to:
+- Register and login.
+- Send kudos and comments to other employees or teams.
+- View kudos history (public and private).
+- View leaderboards for top employees and teams.
+- Admins can upload employees via CSV, reset kudos counts, and manage accounts.
 
-In the project directory, you can run:
+## Tech Stack
+### Frontend:
+- React
+- Material UI
+- Axios
+### Backend:
+- Java 17 / Spring Boot
+- Spring Data JPA
+- MySQL database
+### Build Tools:
+- Maven (backend)
+- Node.js / npm (frontend)
 
-### `npm start`
+## Prerequisites
+- Node.js + npm
+- Java 17 or higher
+- Maven
+- MySQL server running locally
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Setup Instructions
+### Database Setup
+**1**. Start your MySQL server.
+**2**. Create the database:
+` CREATE DATABASE kudosdb; `
+**3**. Check backend/src/main/resources/application.properties for your database credentials:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+` spring.datasource.url=jdbc:mysql://localhost:3306/kudosdb `
 
-### `npm test`
+` spring.datasource.username=root `
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+` spring.datasource.password=yourpassword `
 
-### `npm run build`
+_Adjust username and password if your MySQL credentials are different._
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Backend Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**1**. Open a terminal and navigate to the backend directory:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+` cd backend `
 
-### `npm run eject`
+**2**. Build the project and download dependencies:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+` mvn clean install `
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- This compiles the code and ensures the backend can connect to the database.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**3**. Run the backend server:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+` mvn spring-boot:run `
 
-## Learn More
+- Spring Boot will start on http://localhost:8080
+- Look for ` [INFO] Started Application ` in the console to confirm it is running.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Frontend Setup
 
-### Code Splitting
+**1**. Open another terminal and navigate to the frontend folder:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+` cd frontend `
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**2**. Install dependencies:
 
-### Making a Progressive Web App
+` npm install `
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+**3**. Start the frontend server:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+` npm start `
 
-### Deployment
+- The frontend will run on http://localhost:3000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Ensure the backend is running first, so the frontend can make API requests.
 
-### `npm run build` fails to minify
+## Running the Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**1**. Start MySQL server.
+
+**2**. Run backend:
+` cd backend `
+` mvn spring-boot:run `
+
+**3**. Run frontend:
+
+` cd frontend `
+` npm start `
+
+**4**. Open your browser and go to http://localhost:3000
+
+
+### Notes
+
+- Admin credentials can be initialized in application.properties:
+
+` admin.default.email=admin@kudos.com `
+
+` admin.default.password=admin123 `
+
+- If using a new machine, ensure MySQL is installed and the database kudosdb exists.
+
+- Use ` mvn clean install ` after any backend code changes to refresh dependencies.
+
+- React frontend must be started from the ` frontend ` folder (` cd frontend && npm start `).
